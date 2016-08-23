@@ -26,3 +26,9 @@ Here is a sample configuration block, as well as a sample credentials block.
 If you use nodeinspector, this is a handy command to run from the test directory.
 
 node-debug ./../node_modules/.bin/_mocha -G --timeout 10000 *.test.js
+
+### splitWhere and generateExpression tests
+To test `splitWhere` and `generateExpression`:
+```
+mocha expression.js
+```
