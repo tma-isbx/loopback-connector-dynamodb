@@ -82,7 +82,7 @@ describe('Testing generateExpression', () => {
     assert.equal(filterExpression, '((#height BETWEEN :68 AND :75) OR (#weight < :88) OR ((#team = :Giants) AND (#lastName = :Beckham)))');
   });
 
-  it('should have coorect ExpressionAttributeNames with #', () => {
+  it('should have correct ExpressionAttributeNames with #', () => {
     assert.equal(params.ExpressionAttributeNames['#playerId'], 'playerId');
     assert.equal(params.ExpressionAttributeNames['#born'], 'born');
     assert.equal(params.ExpressionAttributeNames['#height'], 'height');
