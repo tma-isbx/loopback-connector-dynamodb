@@ -69,13 +69,24 @@ describe('Testing splitWhere', () => {
   })
 });
 
+describe('Testing convertWhereObjectToAndArray', () => {
+  let andArray = dynamodb.DynamoDB.prototype.convertWhereObjectToAndArray(where1);
+
+  it('return andArray should have same properties as whereObject', () => {
+    andArray.forEach((ele) => {
+      let key = Object.keys(ele)[0];
+      assert.equal(ele[key], where1[key]);
+    });
+  });
+});
+
 describe('Testing generateExpression', () => {
   let params = {};
-  let keyConditionExpression = dynamodb.DynamoDB.prototype.generateExpression(params, obj.keyQuery);
-  let filterExpression = dynamodb.DynamoDB.prototype.generateExpression(params, obj.filterQuery);
+  let keyConditionExpression = dynamodb.DynamoDB.prototype.generateExpression(params, dynamodb.DynamoDB.prototype.convertWhereObjectToAndArray(obj.keyQuery));
+  let filterExpression = dynamodb.DynamoDB.prototype.generateExpression(params, dynamodb.DynamoDB.prototype.convertWhereObjectToAndArray(obj.filterQuery));
 
   it('should have correct KeyConditionExpression chained with AND', () => {
-    assert.equal(keyConditionExpression, '(#playerId = :1) AND (#born BETWEEN :100 AND :200)');
+    assert.equal(keyConditionExpression, '((#playerId = :1) AND (#born BETWEEN :100 AND :200))');
   });
 
   it('should have correct FilterExpression chained with AND and OR', () => {
@@ -106,7 +117,7 @@ describe('Testing generateExpression', () => {
 
 describe('Testing whereObject with complex AND/OR', () => {
   let params = {};
-  let expression = dynamodb.DynamoDB.prototype.generateExpression(params, where2);
+  let expression = dynamodb.DynamoDB.prototype.generateExpression(params, dynamodb.DynamoDB.prototype.convertWhereObjectToAndArray(where2));
 
   it('should generate correct Expression with complex AND/OR logic', () => {
     assert.equal(expression, '(((#key1 = :1) AND (#key2 = :2) AND ((#key3 = :3) OR (#key4 = :4)) AND (#key5 = :5)) OR (((#key6 = :6) OR (#key7 = :7)) AND (#key8 = :8)))');
